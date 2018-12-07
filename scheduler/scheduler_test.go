@@ -36,9 +36,15 @@ func TestRun(t *testing.T) {
 		t.Error(err)
 	}
 
-	scheduler, err := scheduler.NewScheduler(
-		[]jobs.Job{job},
-	)
+	syncScheduler, err := scheduler.SchedulerFactory("sync")
 
-	scheduler.Run()
+	if err != nil {
+		t.Error(err)
+	}
+
+	syncScheduler, ok := syncScheduler.(scheduler.SyncScheduler)
+
+	syncScheduler.AddJobs([]jobs.Job{job})
+
+	syncScheduler.Run()
 }
